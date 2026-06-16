@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Depends
+from app.utils.rate_limiter import check_rate_limit
 
 from app.api.v1.router import api_router
 from app.core.config import settings
@@ -46,6 +48,7 @@ def create_app() -> FastAPI:
         docs_url="/docs" if not settings.is_production else None,
         redoc_url="/redoc" if not settings.is_production else None,
         lifespan=lifespan,
+        dependencies=[Depends(check_rate_limit)],  # ← add this line
     )
 
     # ─── Middleware (order matters — outermost runs first) ────────────────

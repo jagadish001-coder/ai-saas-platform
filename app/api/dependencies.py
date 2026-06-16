@@ -25,8 +25,9 @@ async def get_current_user(
     db: DBSession,
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> User:
-    """Decode JWT, look up the user, return them.
-    Raises 401 if token is missing, invalid, or user not found."""
+    """Decode JWT, check blacklist, look up the user, return them."""
+    from app.utils.token_blacklist import is_token_blacklisted
+
     try:
         payload = decode_token(credentials.credentials)
         if payload.get("type") != "access":
@@ -36,6 +37,10 @@ async def get_current_user(
             raise UnauthorizedException("Token missing subject")
     except JWTError:
         raise UnauthorizedException("Token is invalid or expired")
+
+    # Check if token has been blacklisted (logged out)
+    if await is_token_blacklisted(credentials.credentials):
+        raise UnauthorizedException("Token has been revoked — please login again")
 
     service = UserService(db)
     user = await service.get_by_id(uuid.UUID(user_id))

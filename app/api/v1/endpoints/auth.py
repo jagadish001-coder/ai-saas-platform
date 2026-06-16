@@ -1,5 +1,6 @@
-from fastapi import APIRouter
-from app.api.dependencies import CurrentUser, DBSession
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPAuthorizationCredentials
+from app.api.dependencies import CurrentUser, DBSession,security
 from app.core.config import settings
 from app.core.exceptions import UnauthorizedException
 from app.core.security import create_access_token, create_refresh_token, decode_token
@@ -89,11 +90,14 @@ async def get_me(current_user: CurrentUser):
 
 
 @router.post("/logout", response_model=SuccessResponse)
-async def logout(current_user: CurrentUser):
+async def logout(
+    current_user: CurrentUser,
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+):
     """
-    Logout endpoint. In a full implementation this would
-    blacklist the token in Redis. For now it signals the
-    client to discard its tokens.
+    Logout endpoint. Blacklists the token in Redis so it
+    cannot be used again even if it has not expired yet.
     """
-    # TODO Phase 3: add token to Redis blacklist
+    from app.utils.token_blacklist import blacklist_token
+    await blacklist_token(credentials.credentials)
     return SuccessResponse(message="Logged out successfully")
