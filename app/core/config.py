@@ -38,6 +38,7 @@ class Settings(BaseSettings):
 
     # AI (Phase 2)
     GEMINI_API_KEY: str = ""
+    QDRANT_API_KEY: str = ""
     QDRANT_URL: str = "http://localhost:6333"
     QDRANT_COLLECTION_NAME: str = "documents"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
