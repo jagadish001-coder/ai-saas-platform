@@ -1,6 +1,10 @@
 # AI SaaS Platform
 
+
 A production-grade AI platform with full authentication, PostgreSQL, vector search (Phase 2), monitoring, CI/CD, and Docker deployment.
+
+## Live Demo
+ **Live API:** https://ai-saas-platform-production-99d4.up.railway.app/api/v1/health
 
 ## Architecture
 
@@ -101,8 +105,8 @@ alembic downgrade -1
 
 ## Roadmap
 
-- [x] Phase 1 — Auth, PostgreSQL, REST APIs, CI/CD
-- [ ] Phase 2 — Document upload, RAG pipeline, Qdrant vector DB
-- [ ] Phase 3 — Rate limiting, security hardening, structured logging
-- [ ] Phase 4 — Prometheus metrics, Grafana dashboards
-- [ ] Phase 5 — Production deployment (Railway), custom domain
+- [] Phase 1 — Auth, PostgreSQL, REST APIs, CI/CD
+- [] Phase 2 — Document upload, RAG pipeline, Qdrant vector DB
+- [] Phase 3 — Rate limiting, security hardening, structured logging
+- [] Phase 4 — Prometheus metrics, Grafana dashboards
+- [] Phase 5 — Production deployment (Railway), custom domain
